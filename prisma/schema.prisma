@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+
+enum PROJECT_STATUS {
+  PENDING
+  IN_PROGRESS
+  SUSPENDED
+  FULFILED
+}
+
+model User {
+  id String @id @default(uuid())
+  full_name String
+  username String @unique
+  password String
+  createdAt DateTime @default(now())
+  sentMessages Message[] @relation("sentMessages")
+  inboxMessages Message[] @relation("inboxMessages")
+  createdTasks Task[] @relation(name: "createdTasks")
+  assignedTasks Task[] @relation(name: "assignedTasks")
+  createdProjects Project[] @relation(name: "createdProjects")
+  invitedProjects Project[]
+}
+
+model Project {
+  id String @id @default(uuid())
+  title String
+  description String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  status PROJECT_STATUS @default(PENDING)
+  isDeleted Boolean @default(false)
+  messages Message[]
+  creatorId String
+  creator User @relation(fields: [creatorId], references: [id], name: "createdProjects")
+  members User[]
+}
+
+model Message {
+  id String @id @default(uuid())
+  content String?
+  sentAt DateTime @default(now())
+  senderId String
+  sender User @relation(fields: [senderId], references: [id], name: "sentMessages")
+  privateRecepientId String?
+  privateRecepient User? @relation(fields: [privateRecepientId], references: [id], name: "inboxMessages")
+  projectRecepientId String?
+  projectRecepient Project? @relation(fields: [projectRecepientId], references: [id])
+  task Task?
+}
+
+model Task {
+  id String @id @default(uuid())
+  title String
+  description String?
+  progressIndex Float?
+  isAcomplished Boolean @default(false)
+  creatorId String
+  creator User @relation(fields: [creatorId], references: [id], name: "createdTasks")
+  assignedUsers User[] @relation(name: "assignedTasks")
+  messageId String @unique
+  message Message @relation(fields: [messageId], references: [id])
+  checkList CheckListItem[]
+}
+
+model CheckListItem {
+  id String @id @default(uuid())
+  content String
+  isDone Boolean @default(false)
+  taskId String
+  task Task @relation(fields: [taskId], references: [id])
+}
