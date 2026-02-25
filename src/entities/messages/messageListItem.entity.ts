@@ -1,5 +1,5 @@
 import { ProfileEntity } from "../profile/profile.entity";
-import { TaskListItemEntity } from "../tasks/taskListItem.entity";
+import { TaskInMessageEntity } from "../tasks/taskInMessage.entity";
 
 export type MessageEntity = {
   id: string;
@@ -8,6 +8,6 @@ export type MessageEntity = {
   sender: ProfileEntity;
   privateRecepient?: string | null;
   projectRecepientId?: string | null;
-  task?: TaskListItemEntity | null;
+  task?: TaskInMessageEntity | null;
   iAmSender: boolean;
 };

@@ -3,20 +3,46 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Action } from "@/core/ports/action.port";
 import { MessageEntity } from "@/entities/messages/messageListItem.entity";
+import { changeTaskAcomplishmentSchema } from "@/schema/tasks/changeTaskAcompishment.schema";
 import { format } from "date-fns";
 import { Clock2 } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export default function MessageCard({
   message,
   onPreviewTask,
-  isFirst
+  isFirst,
+  onChangeTaskAcomplishment,
 }: {
   message: MessageEntity;
   onPreviewTask?: () => void;
-  isFirst:boolean;
+  isFirst: boolean;
+  onChangeTaskAcomplishment: Action<changeTaskAcomplishmentSchema>;
 }) {
+  const [isDone, setIsDone] = useState(message.task?.isAcomplished ?? false);
+
   const isTask = !!message.task;
+
+  const handleChangeTaskAcomplishment = async () => {
+    const optimisticValue = !isDone;
+
+    // optimistic update
+    setIsDone(optimisticValue);
+
+    const result = await onChangeTaskAcomplishment({
+      id: message.task!.id,
+      isAcomplished: optimisticValue,
+    });
+
+    if (!result.ok) {
+      // rollback
+      setIsDone(!optimisticValue);
+      toast.error(result.message || "Something went wrong");
+    }
+  };
 
   return (
     <div
@@ -51,7 +77,14 @@ export default function MessageCard({
         {/* Content */}
         <div className="flex items-start gap-2">
           {isTask && (
-            <Checkbox className="mt-1" onClick={(e) => e.stopPropagation()} />
+            <Checkbox
+              className="mt-1"
+              checked={isDone}
+              onClick={async (e) => {
+                e.stopPropagation();
+                await handleChangeTaskAcomplishment();
+              }}
+            />
           )}
 
           <div className="text-sm space-y-1 w-full">

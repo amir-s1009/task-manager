@@ -1,14 +1,9 @@
 import { ProfileEntity } from "../profile/profile.entity";
 
-export type TaskListItemEntity = {
+export type TaskInMessageEntity = {
   id: string;
   title: string;
   description?: string | null;
-  project: {
-    id: string;
-    title: string;
-  };
   assignedUsers: ProfileEntity[];
-  isAssignedToOthers: boolean;
   isAcomplished: boolean;
 };

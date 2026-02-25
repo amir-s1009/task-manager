@@ -50,9 +50,10 @@ export const getProjectDetailAction: Action<
             },
             task: {
               select: {
+                id: true,
                 title: true,
                 description: true,
-                id: true,
+                isAcomplished: true,
                 assignedUsers: {
                   select: {
                     full_name: true,
@@ -102,6 +103,7 @@ export const getProjectDetailAction: Action<
                 id: message.task.id,
                 title: message.task.title,
                 description: message.task.description,
+                isAcomplished: message.task.isAcomplished,
                 assignedUsers: message.task.assignedUsers,
               }
             : undefined,
