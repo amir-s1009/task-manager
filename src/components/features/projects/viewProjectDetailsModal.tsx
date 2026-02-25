@@ -120,7 +120,12 @@ export default function ViewProjectDetailsModal({
 
   return (
     <Dialog open onOpenChange={() => router.back()}>
-      <DialogContent className={cn("max-w-2xl transition-all duration-100", addModalOpen && "scale-90")}>
+      <DialogContent
+        className={cn(
+          "max-w-2xl transition-all duration-100",
+          addModalOpen && "scale-90"
+        )}
+      >
         {/* ================= HEADER ================= */}
         <DialogHeader className="space-y-2">
           <div className="flex items-start justify-between">
@@ -254,8 +259,8 @@ export default function ViewProjectDetailsModal({
                 placeholder="username"
                 value={usernameToAdd}
                 onChange={(e) => {
-                    setUsernameToAdd(e.target.value)
-                    handleSearchUserWithUsername();
+                  setUsernameToAdd(e.target.value);
+                  handleSearchUserWithUsername();
                 }}
               />
 
@@ -269,26 +274,25 @@ export default function ViewProjectDetailsModal({
                 <p className="text-xs text-red-500">username not found!</p>
               )}
 
-              {
-                userToAdd && <div className="flex items-center gap-3">
-                <Avatar>
-                  <AvatarFallback>
-                    {userToAdd.full_name[0]}
-                  </AvatarFallback>
-                </Avatar>
-    
-                <div>
-                  <p className="font-medium">
-                    {userToAdd.full_name}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    @{userToAdd.username}
-                  </p>
-                </div>
-              </div>
-              }
+              {userToAdd && (
+                <div className="flex items-center gap-3">
+                  <Avatar>
+                    <AvatarFallback>{userToAdd.full_name[0]}</AvatarFallback>
+                  </Avatar>
 
-              <Button onClick={handleAddMember} disabled={!(userToAdd && usernameToAdd)}>
+                  <div>
+                    <p className="font-medium">{userToAdd.full_name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      @{userToAdd.username}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              <Button
+                onClick={handleAddMember}
+                disabled={!(userToAdd && usernameToAdd)}
+              >
                 Add to Project
               </Button>
             </div>

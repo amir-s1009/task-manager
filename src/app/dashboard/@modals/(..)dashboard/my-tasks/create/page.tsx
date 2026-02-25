@@ -3,20 +3,20 @@ import { createTaskAction } from "@/actions/tasks/createTask.action";
 import CreateTaskModal from "@/components/features/projects/createTaskModal";
 
 export default async function CreateTaskModalServer({
-  params,
+  searchParams,
 }: {
-  params: Promise<{ id: string }>;
+  searchParams: Promise<{ projectId: string }>;
 }) {
-  const { id } = await params;
+  const { projectId } = await searchParams;
   const members = await getProjectMembersAction({
-    projectId: id,
+    projectId,
   });
   if (!members.ok) throw new Error(members.message);
   if (!members.data) throw new Error("No members found!");
   return (
     <CreateTaskModal
       onCreateTask={createTaskAction}
-      projectId={id}
+      projectId={projectId}
       projectMembers={members.data}
     />
   );

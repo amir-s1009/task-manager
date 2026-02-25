@@ -4,12 +4,21 @@ import { ReactNode } from "react";
 
 export default async function DashboardLayoutServer({
   children,
+  modals,
 }: {
   children: ReactNode;
+  modals: ReactNode;
 }) {
   const profile = await getProfileAction(undefined);
-  if(!profile.ok) throw new Error(profile.message);
-  if(!profile.data) throw new Error("No profile data found!");
+  if (!profile.ok) throw new Error(profile.message);
+  if (!profile.data) throw new Error("No profile data found!");
 
-  return <DashboardLayout profile={profile.data}>{children}</DashboardLayout>;
+  return (
+    <DashboardLayout profile={profile.data}>
+      <>
+        {children}
+        {modals}
+      </>
+    </DashboardLayout>
+  );
 }

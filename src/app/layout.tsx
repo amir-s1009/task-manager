@@ -1,5 +1,5 @@
 import "./globals.css";
-import { Toaster } from "sonner"
+import { Toaster } from "sonner";
 
 export default function RootLayout({
   children,

@@ -144,7 +144,7 @@ export default function ProjectDetailPage({
                 onPreviewTask={() => {
                   if (!!message.task) {
                     router.push(
-                      `/dashboard/my-projects/${project.id}/editTask/${message.task?.id}`
+                      `/dashboard/my-tasks/${message.task?.id}?projectId=${projectData.id}`
                     );
                   }
                 }}
@@ -168,10 +168,12 @@ export default function ProjectDetailPage({
           variant="secondary"
           type="button"
           onClick={() =>
-            router.push(`/dashboard/my-projects/${project.id}/createTask`)
+            router.push(
+              `/dashboard/my-tasks/create?projectId=${projectData.id}`
+            )
           }
         >
-          <PlusCircle size={18} />
+          <PlusCircle size={20} />
         </Button>
       </form>
     </div>
